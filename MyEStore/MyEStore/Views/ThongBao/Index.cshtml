@@ -1,47 +1,67 @@
-﻿@model List<MyEStore.Models.Slider>
+﻿@model IEnumerable<DevSidergin.Entities.ThongBao>
 @{
-    ViewData["Title"] = ViewData["Title"] ?? "Danh sách hàng hóa";
-    var siteUrl = ViewContext.HttpContext.Request.Scheme + "://" + ViewContext.HttpContext.Request.Host;
-    var sliders = ViewData["Sliders"] as List<MyEStore.Models.Slider> ?? new List<MyEStore.Models.Slider>();
-    var newProducts = ViewData["NewProducts"] as List<MyEStore.Models.HangHoaVM> ?? new List<MyEStore.Models.HangHoaVM>();
-    var saleProducts = ViewData["SaleProducts"] as List<MyEStore.Models.HangHoaVM> ?? new List<MyEStore.Models.HangHoaVM>();
+    ViewData["Title"] = "Danh sách thông báo";
 }
 
-<meta property="og:title" content="@ViewData["Title"]" />
-<meta property="og:description" content="Khám phá các sản phẩm đa dạng tại MyStore." />
-<meta property="og:image" content="@Url.Content("~/images/default-og-image.jpg")" />
-<meta property="og:url" content="@siteUrl" />
-<meta property="og:type" content="website" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-<link rel="stylesheet" href="@Url.Content("~/css/PHome.css")" />
+<div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-blue-700 to-indigo-700 px-6 py-4">
+                <h1 class="text-2xl font-semibold text-white text-center">
+                    <i class="fas fa-bell mr-2"></i>Danh sách thông báo
+                </h1>
+            </div>
+        </div>
 
-
-<h2 style="text-align: center;">📣Thông Báo Sự Kiện Sắp Và Đang Diễn Ra</h2>
-
-@if (!Model.Any())
-{
-    <p>Không có sự kiện nào sắp diễn ra trong 7 ngày tới.</p>
-}
-else
-{
-    <ul>
-        @foreach (var s in Model)
+        <!-- Alert -->
+        @if (TempData["ThongBao"] != null)
         {
-            <li style="margin-bottom: 20px;">
-                <strong>@s.TieuDe</strong> – Bắt đầu: @s.NgayBatDau.ToShortDateString()
-                <br />
-
-                @if (!string.IsNullOrEmpty(s.HinhAnh))
-                {
-                    <img src="@Url.Content($"~/{s.HinhAnh}")" alt="@s.TieuDe" style="max-width: 400px; height: auto; margin-top: 10px;" />
-                }
-
-                <br />
-                <a href="@s.LinkQuangCao" style="display:inline-block;margin-top:10px;padding:8px 16px;background:#007bff;color:white;text-decoration:none;border-radius:5px;">
-                    Xem chi tiết
-                </a>
-            </li>
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6 relative">
+                @TempData["ThongBao"]
+                <button type="button" class="absolute top-0 right-0 mt-4 mr-4 text-green-700 hover:text-green-900" data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         }
-    </ul>
+
+        <!-- Content -->
+        <div class="bg-white shadow-lg rounded-xl p-6">
+            <div class="flex justify-end mb-4">
+                <a asp-action="Create" class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm">
+                    <i class="fas fa-plus mr-2"></i>Tạo thông báo mới
+                </a>
+            </div>
+
+            <div class="space-y-4">
+                @foreach (var thongBao in Model)
+                {
+                    <div class="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">@thongBao.TieuDe</h3>
+                                <p class="text-gray-600 mt-1">@thongBao.NoiDung</p>
+                                <div class="mt-2 text-sm text-gray-500">
+                                    <span><i class="far fa-calendar-alt mr-1"></i>@thongBao.NgayTao.ToString("dd/MM/yyyy HH:mm")</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <a asp-action="Edit" asp-route-id="@thongBao.MaTb" class="text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@thongBao.MaTb" class="text-red-600 hover:text-red-800">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 }
 

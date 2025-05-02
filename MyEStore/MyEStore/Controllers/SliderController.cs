@@ -9,6 +9,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using System.Net.Mail;
+using System.Net;
+using DevSidergin.Entities;
 
 namespace DevSidergin.Controllers
 {
@@ -137,7 +140,46 @@ namespace DevSidergin.Controllers
             {
                 _ctx.Sliders.Add(model);
                 await _ctx.SaveChangesAsync();
-                TempData["ThongBao"] = "Thêm slider thành công!";
+
+                // Get all customers with email notifications enabled
+                var customers = await _ctx.KhachHangs
+                    .Where(k => k.AcEmailNoti && k.HieuLuc)
+                    .ToListAsync();
+
+                // Create notifications for each customer
+                foreach (var customer in customers)
+                {
+                    var thongBao = new ThongBao
+                    {
+                        TieuDe = model.TieuDe,
+                        NoiDung = model.MoTa,
+                        NgayTao = DateTime.Now,
+                        MaSlider = model.MaSlider.ToString(),
+                        MaMv = GetLoggedInNhanVienId(),
+                        MaKh = customer.MaKh // Set the customer ID
+                    };
+
+                    _ctx.ThongBaos.Add(thongBao);
+                }
+
+                await _ctx.SaveChangesAsync();
+
+                // Check if we should send emails immediately or schedule them
+                var daysUntilEvent = (model.NgayBatDau - DateTime.Now).TotalDays;
+
+                if (daysUntilEvent <= 7)
+                {
+                    // Send emails immediately for events within 7 days
+                    await SendEmailNotifications(model);
+                    TempData["ThongBao"] = "Thêm slider thành công và đã gửi thông báo!";
+                }
+                else
+                {
+                    // Schedule email sending for events more than 7 days away
+                    ScheduleEmailNotification(model, daysUntilEvent);
+                    TempData["ThongBao"] = "Thêm slider thành công! Thông báo sẽ được gửi tự động trước 7 ngày sự kiện.";
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException ex)
@@ -146,6 +188,153 @@ namespace DevSidergin.Controllers
                 Console.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
                 ModelState.AddModelError("", $"Lỗi khi lưu slider: {ex.InnerException?.Message ?? ex.Message}");
                 return View(model);
+            }
+        }
+
+        private void ScheduleEmailNotification(Slider slider, double daysUntilEvent)
+        {
+            // Calculate when to send the email (7 days before the event)
+            var sendDate = slider.NgayBatDau.AddDays(-7);
+            
+            // Create a background task to send the email at the scheduled time
+            Task.Run(async () =>
+            {
+                try
+                {
+                    // Wait until it's time to send the email
+                    var delay = sendDate - DateTime.Now;
+                    if (delay.TotalMilliseconds > 0)
+                    {
+                        await Task.Delay(delay);
+                    }
+
+                    // Send the email
+                    await SendEmailNotifications(slider);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error in scheduled email sending: {ex.Message}");
+                }
+            });
+        }
+
+        private async Task SendEmailNotifications(Slider slider)
+        {
+            var customers = await _ctx.KhachHangs
+                .Where(k => k.AcEmailNoti && k.HieuLuc)
+                .ToListAsync();
+
+            foreach (var customer in customers)
+            {
+                try
+                {
+                    using (var message = new MailMessage())
+                    {
+                        message.From = new MailAddress("phannguyendangkhoa0915@gmail.com", "MyEStore");
+                        message.To.Add(customer.Email);
+                        message.Subject = $"Thông báo mới: {slider.TieuDe}";
+                        
+                        // Create beautiful HTML email template
+                        message.Body = $@"
+                            <!DOCTYPE html>
+                            <html>
+                            <head>
+                                <meta charset='UTF-8'>
+                                <style>
+                                    body {{
+                                        font-family: Arial, sans-serif;
+                                        line-height: 1.6;
+                                        color: #333;
+                                        max-width: 600px;
+                                        margin: 0 auto;
+                                        padding: 20px;
+                                    }}
+                                    .header {{
+                                        background: linear-gradient(135deg, #4a90e2, #357abd);
+                                        color: white;
+                                        padding: 20px;
+                                        text-align: center;
+                                        border-radius: 8px 8px 0 0;
+                                    }}
+                                    .content {{
+                                        background: #ffffff;
+                                        padding: 20px;
+                                        border: 1px solid #e0e0e0;
+                                        border-radius: 0 0 8px 8px;
+                                    }}
+                                    .title {{
+                                        color: #2c3e50;
+                                        font-size: 24px;
+                                        margin-bottom: 20px;
+                                    }}
+                                    .description {{
+                                        color: #34495e;
+                                        font-size: 16px;
+                                        margin-bottom: 20px;
+                                    }}
+                                    .date {{
+                                        color: #7f8c8d;
+                                        font-size: 14px;
+                                        margin-bottom: 20px;
+                                    }}
+                                    .event-date {{
+                                        color: #e74c3c;
+                                        font-weight: bold;
+                                        margin: 20px 0;
+                                    }}
+                                    .footer {{
+                                        text-align: center;
+                                        margin-top: 20px;
+                                        padding-top: 20px;
+                                        border-top: 1px solid #e0e0e0;
+                                        color: #7f8c8d;
+                                        font-size: 14px;
+                                    }}
+                                    .button {{
+                                        display: inline-block;
+                                        padding: 10px 20px;
+                                        background: #4a90e2;
+                                        color: white;
+                                        text-decoration: none;
+                                        border-radius: 4px;
+                                        margin-top: 20px;
+                                    }}
+                                </style>
+                            </head>
+                            <body>
+                                <div class='header'>
+                                    <h1>Thông báo mới từ MyEStore</h1>
+                                </div>
+                                <div class='content'>
+                                    <h2 class='title'>{slider.TieuDe}</h2>
+                                    <p class='description'>{slider.MoTa}</p>
+                                    <p class='event-date'>Sự kiện diễn ra vào: {slider.NgayBatDau:dd/MM/yyyy HH:mm}</p>
+                                    <div style='text-align: center;'>
+                                        <a href='{slider.LinkQuangCao}' class='button'>Xem chi tiết</a>
+                                    </div>
+                                    <div class='footer'>
+                                        <p>Trân trọng,<br>Đội ngũ MyEStore</p>
+                                        <p>Đây là email tự động, vui lòng không trả lời.</p>
+                                    </div>
+                                </div>
+                            </body>
+                            </html>
+                        ";
+                        message.IsBodyHtml = true;
+
+                        using (var client = new SmtpClient("smtp.gmail.com", 587))
+                        {
+                            client.EnableSsl = true;
+                            client.Credentials = new NetworkCredential("phannguyendangkhoa0915@gmail.com", "iagqpgyvbegvfdoh");
+                            await client.SendMailAsync(message);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log the error but continue with other customers
+                    Console.WriteLine($"Error sending email to {customer.Email}: {ex.Message}");
+                }
             }
         }
 
