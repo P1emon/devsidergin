@@ -24,8 +24,11 @@
                     <div class="mt-2">
                         <img id="imagePreview" src="" alt="Image Preview" style="max-width: 200px; height: auto; display: none;" class="img-thumbnail" />
                     </div>
-                    <small class="form-text text-muted">Chấp nhận .jpg, .png, .gif. Kích thước tối đa 5MB.</small>
-                    <span asp-validation-for="HinhAnh" class="text-danger"></span>
+                    <small class="form-text text-muted">Chấp nhận .jpg, .jpeg, .png, .gif. Kích thước tối đa 5MB.</small>
+                    @if (ViewData.ModelState.ContainsKey("HinhAnh") && ViewData.ModelState["HinhAnh"].Errors.Any())
+                    {
+                        <span class="text-danger">@ViewData.ModelState["HinhAnh"].Errors.First().ErrorMessage</span>
+                    }
                 </div>
                 <div class="mb-3">
                     <label asp-for="LinkQuangCao" class="form-label">Link quảng cáo</label>
@@ -74,7 +77,7 @@
                     const maxSize = 5 * 1024 * 1024; // 5MB
                     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
                     if (!allowedTypes.includes(file.type)) {
-                        alert('Chỉ hỗ trợ các định dạng ảnh: .jpg, .png, .gif.');
+                        alert('Chỉ hỗ trợ các định dạng ảnh: .jpg, .jpeg, .png, .gif.');
                         this.value = '';
                         preview.hide();
                     } else if (file.size > maxSize) {

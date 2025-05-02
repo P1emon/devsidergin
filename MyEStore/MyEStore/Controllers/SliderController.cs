@@ -56,13 +56,14 @@ namespace DevSidergin.Controllers
             });
         }
 
-        // POST: /Slider/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Slider model, IFormFile hinhAnh)
         {
-            // Remove navigation property from validation
+            // Loại bỏ validation tự động cho các trường không cần thiết
             ModelState.Remove("NhanVien");
+            ModelState.Remove("HinhAnh");
+            ModelState.Remove("MaNV");
 
             // Handle image upload
             if (hinhAnh == null || hinhAnh.Length == 0)
@@ -102,27 +103,35 @@ namespace DevSidergin.Controllers
 
             // Set MaNV from Claims
             string maNV = GetLoggedInNhanVienId();
+            Console.WriteLine($"MaNV from Claims: {maNV}");
             if (string.IsNullOrEmpty(maNV))
             {
                 ModelState.AddModelError("MaNV", "Không thể xác định nhân viên hiện tại.");
-                return View(model);
             }
-
-            // Kiểm tra nhân viên có tồn tại trong database không
-            bool nhanVienExists = await _ctx.NhanViens.AnyAsync(nv => nv.MaNv == maNV);
-            if (!nhanVienExists)
+            else
             {
-                ModelState.AddModelError("MaNV", "Nhân viên không tồn tại trong hệ thống.");
-                return View(model);
+                // Kiểm tra nhân viên có tồn tại trong database không
+                bool nhanVienExists = await _ctx.NhanViens.AnyAsync(nv => nv.MaNv == maNV);
+                Console.WriteLine($"NhanVien exists: {nhanVienExists}");
+                if (!nhanVienExists)
+                {
+                    ModelState.AddModelError("MaNV", "Nhân viên không tồn tại trong hệ thống.");
+                }
+                else
+                {
+                    model.MaNV = maNV;
+                }
             }
 
+            // Log ModelState errors
             if (!ModelState.IsValid)
             {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                Console.WriteLine("ModelState errors: " + string.Join(", ", errors));
                 return View(model);
             }
 
             model.NgayTao = DateTime.Now;
-            model.MaNV = maNV;
 
             try
             {
@@ -133,10 +142,8 @@ namespace DevSidergin.Controllers
             }
             catch (DbUpdateException ex)
             {
-                // Log exception details for debugging
                 Console.WriteLine($"Exception: {ex.Message}");
                 Console.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
-                
                 ModelState.AddModelError("", $"Lỗi khi lưu slider: {ex.InnerException?.Message ?? ex.Message}");
                 return View(model);
             }
@@ -163,8 +170,10 @@ namespace DevSidergin.Controllers
                 return NotFound();
             }
 
-            // Remove navigation property from validation
+            // Remove navigation property and fields from validation
             ModelState.Remove("NhanVien");
+            ModelState.Remove("HinhAnh");
+            ModelState.Remove("MaNV");
 
             var slider = await _ctx.Sliders.FindAsync(id);
             if (slider == null)
@@ -207,10 +216,8 @@ namespace DevSidergin.Controllers
                     slider.HinhAnh = $"/images/sliders/{fileName}";
                 }
             }
-            else if (string.IsNullOrEmpty(slider.HinhAnh))
-            {
-                ModelState.AddModelError("HinhAnh", "Hình ảnh là bắt buộc.");
-            }
+            // Note: Removed the else if (string.IsNullOrEmpty(slider.HinhAnh)) check
+            // In Edit, the existing image can be retained if no new image is uploaded
 
             // Validate dates
             if (model.NgayKetThuc <= model.NgayBatDau)
@@ -220,22 +227,27 @@ namespace DevSidergin.Controllers
 
             // Set MaNV from Claims
             string maNV = GetLoggedInNhanVienId();
+            Console.WriteLine($"MaNV from Claims: {maNV}");
             if (string.IsNullOrEmpty(maNV))
             {
                 ModelState.AddModelError("MaNV", "Không thể xác định nhân viên hiện tại.");
-                return View(model);
             }
-
-            // Kiểm tra nhân viên có tồn tại trong database không
-            bool nhanVienExists = await _ctx.NhanViens.AnyAsync(nv => nv.MaNv == maNV);
-            if (!nhanVienExists)
+            else
             {
-                ModelState.AddModelError("MaNV", "Nhân viên không tồn tại trong hệ thống.");
-                return View(model);
+                // Kiểm tra nhân viên có tồn tại trong database không
+                bool nhanVienExists = await _ctx.NhanViens.AnyAsync(nv => nv.MaNv == maNV);
+                Console.WriteLine($"NhanVien exists: {nhanVienExists}");
+                if (!nhanVienExists)
+                {
+                    ModelState.AddModelError("MaNV", "Nhân viên không tồn tại trong hệ thống.");
+                }
             }
 
+            // Log ModelState errors
             if (!ModelState.IsValid)
             {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                Console.WriteLine("ModelState errors: " + string.Join(", ", errors));
                 return View(model);
             }
 
@@ -256,10 +268,8 @@ namespace DevSidergin.Controllers
             }
             catch (DbUpdateException ex)
             {
-                // Log exception details for debugging
                 Console.WriteLine($"Exception: {ex.Message}");
                 Console.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
-                
                 ModelState.AddModelError("", $"Lỗi khi cập nhật slider: {ex.InnerException?.Message ?? ex.Message}");
                 return View(model);
             }
