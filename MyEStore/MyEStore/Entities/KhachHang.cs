@@ -44,6 +44,7 @@ public partial class KhachHang
     public int FailedLoginAttempts { get; set; } = 0;
 
     public bool IsLocked { get; set; } = false;
+    public bool AcEmailNoti { get; set; } = false;
 
     public DateTime? LockoutEnd { get; set; }
     public DateTime? MuaHangLanCuoi { get; set; }

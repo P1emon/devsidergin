@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DevSidergin.Entities;
 using Microsoft.EntityFrameworkCore;
 using MyEStore.Models;
 
@@ -17,6 +18,7 @@ public partial class MyeStoreContext : DbContext
         : base(options)
     {
     }
+    public DbSet<ThongBao> ThongBaos { get; set; }
 
     public virtual DbSet<BanBe> BanBes { get; set; }
 

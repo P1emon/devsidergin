@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyEStore.Entities;
 
@@ -11,9 +12,11 @@ using MyEStore.Entities;
 namespace MyEStore.Migrations
 {
     [DbContext(typeof(MyeStoreContext))]
-    partial class MyeStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20250502175826_AddAcEmailNotiToKhachHang")]
+    partial class AddAcEmailNotiToKhachHang
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,52 +24,6 @@ namespace MyEStore.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("DevSidergin.Entities.ThongBao", b =>
-                {
-                    b.Property<int>("MaThongBao")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaThongBao"));
-
-                    b.Property<string>("KhachHangMaKh")
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("MaKh")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MaNv")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("MaSlider")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("NgayTao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NhanVienMaNv")
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("NoiDung")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SliderMaSlider")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TieuDe")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("MaThongBao");
-
-                    b.HasIndex("KhachHangMaKh");
-
-                    b.HasIndex("NhanVienMaNv");
-
-                    b.HasIndex("SliderMaSlider");
-
-                    b.ToTable("ThongBaos");
-                });
 
             modelBuilder.Entity("MyEStore.Entities.BanBe", b =>
                 {
@@ -984,27 +941,6 @@ namespace MyEStore.Migrations
                     b.HasIndex("MaNV");
 
                     b.ToTable("Sliders");
-                });
-
-            modelBuilder.Entity("DevSidergin.Entities.ThongBao", b =>
-                {
-                    b.HasOne("MyEStore.Entities.KhachHang", "KhachHang")
-                        .WithMany()
-                        .HasForeignKey("KhachHangMaKh");
-
-                    b.HasOne("MyEStore.Entities.NhanVien", "NhanVien")
-                        .WithMany()
-                        .HasForeignKey("NhanVienMaNv");
-
-                    b.HasOne("MyEStore.Models.Slider", "Slider")
-                        .WithMany()
-                        .HasForeignKey("SliderMaSlider");
-
-                    b.Navigation("KhachHang");
-
-                    b.Navigation("NhanVien");
-
-                    b.Navigation("Slider");
                 });
 
             modelBuilder.Entity("MyEStore.Entities.BanBe", b =>
