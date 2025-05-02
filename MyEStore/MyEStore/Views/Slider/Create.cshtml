@@ -1,0 +1,102 @@
+﻿@model MyEStore.Models.Slider
+@{
+    ViewData["Title"] = "Thêm Slider";
+}
+<div class="container py-4">
+    <h1 class="mb-4">Thêm Slider</h1>
+    <div class="card">
+        <div class="card-body">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div class="mb-3">
+                    <label asp-for="TieuDe" class="form-label">Tiêu đề</label>
+                    <input asp-for="TieuDe" class="form-control" placeholder="Nhập tiêu đề slider" />
+                    <span asp-validation-for="TieuDe" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="MoTa" class="form-label">Mô tả</label>
+                    <textarea asp-for="MoTa" class="form-control" rows="4" placeholder="Nhập mô tả (tùy chọn)"></textarea>
+                    <span asp-validation-for="MoTa" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="HinhAnh" class="form-label">Hình ảnh</label>
+                    <input type="file" name="hinhAnh" id="hinhAnh" class="form-control" accept="image/jpeg,image/png,image/gif" required />
+                    <div class="mt-2">
+                        <img id="imagePreview" src="" alt="Image Preview" style="max-width: 200px; height: auto; display: none;" class="img-thumbnail" />
+                    </div>
+                    <small class="form-text text-muted">Chấp nhận .jpg, .png, .gif. Kích thước tối đa 5MB.</small>
+                    <span asp-validation-for="HinhAnh" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="LinkQuangCao" class="form-label">Link quảng cáo</label>
+                    <input asp-for="LinkQuangCao" class="form-control" placeholder="Nhập URL quảng cáo (ví dụ: https://example.com)" />
+                    <span asp-validation-for="LinkQuangCao" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NgayBatDau" class="form-label">Ngày bắt đầu</label>
+                        <input asp-for="NgayBatDau" type="date" class="form-control" />
+                        <span asp-validation-for="NgayBatDau" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NgayKetThuc" class="form-label">Ngày kết thúc</label>
+                        <input asp-for="NgayKetThuc" type="date" class="form-control" />
+                        <span asp-validation-for="NgayKetThuc" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="mb-3 form-check">
+                    <input asp-for="HieuLuc" class="form-check-input" type="checkbox" checked />
+                    <label asp-for="HieuLuc" class="form-check-label">Hiệu lực</label>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i>Lưu</button>
+                    <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left me-2"></i>Quay lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Image preview
+            $('#hinhAnh').on('change', function () {
+                const file = this.files[0];
+                const preview = $('#imagePreview');
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        preview.attr('src', e.target.result).show();
+                    };
+                    reader.readAsDataURL(file);
+
+                    // Validate file size and type
+                    const maxSize = 5 * 1024 * 1024; // 5MB
+                    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                    if (!allowedTypes.includes(file.type)) {
+                        alert('Chỉ hỗ trợ các định dạng ảnh: .jpg, .png, .gif.');
+                        this.value = '';
+                        preview.hide();
+                    } else if (file.size > maxSize) {
+                        alert('Kích thước ảnh không được vượt quá 5MB.');
+                        this.value = '';
+                        preview.hide();
+                    }
+                } else {
+                    preview.hide();
+                }
+            });
+
+            // Date validation
+            $('form').on('submit', function (e) {
+                const startDate = new Date($('#NgayBatDau').val());
+                const endDate = new Date($('#NgayKetThuc').val());
+                if (endDate <= startDate) {
+                    e.preventDefault();
+                    alert('Ngày kết thúc phải sau ngày bắt đầu.');
+                    $('#NgayKetThuc').focus();
+                }
+            });
+        });
+    </script>
+}

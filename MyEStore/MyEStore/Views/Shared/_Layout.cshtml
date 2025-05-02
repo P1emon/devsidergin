@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SIDERGIN - Chăm sóc sức khỏe</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/css/LayoutStyles.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a asp-area="" asp-controller="Products" asp-action="Index">
+                    <h1><span class="highlight">S</span>idergin</h1>
+                </a>
+            </div>
+
+            <!-- Thêm form tìm kiếm vào đây -->
+            <form method="get" asp-action="Search" asp-controller="Products" class="search-container">
+                <input type="text" name="query" class="search-input" placeholder="Nhập từ khóa tìm kiếm..." />
+                <button type="submit" class="search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+            <nav>
+                <ul>
+                    <li class="nav-item">
+                        <a class="main-nav-link" asp-area="" asp-controller="slider" asp-action="Index">
+                            <i class="bi bi-newspaper"></i> slider
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="main-nav-link" asp-controller="ThongBao" asp-action="Index">
+                            <i class="bi bi-bell"></i> Thông Báo
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="main-nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-bell"></i> Admin
+                        </a>
+                    </li>
+                    <li class="nav-item cart-wrapper">
+                        <a class="main-nav-link" asp-area="" asp-controller="Cart" asp-action="Index">
+                            <i class="bi bi-cart"></i> Giỏ hàng
+                            <span class="badge" id="cart-count">0</span>
+                        </a>
+                    </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i> 
+                                @if (User.Claims.Any(c => c.Type == "RankIcon" && !string.IsNullOrEmpty(c.Value)))
+                                {
+                                 <img src="~/Hinh/Others/@User.Claims.First(c => c.Type == "RankIcon").Value" alt="Rank Icon" style="width: 60px; height: 40px; margin-right: 8px; vertical-align: middle;" />
+                                }
+                                <b>@User.Identity.Name</b>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Employee" asp-action="Profile"><i class="bi bi-person-circle"></i> Cập nhật hồ sơ</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Employee" asp-action="TransactionHistory"><i class="bi bi-bag-check"></i> Đơn hàng từng mua</a></li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Employee" asp-action="Thongbao">
+                                        <i class="bi bi-bell"></i> Thông báo
+                                        @if (ViewData["UpcomingDeliveriesCount"] != null && (int)ViewData["UpcomingDeliveriesCount"] > 0)
+                                        {
+                                            <span class="badge bg-danger">@ViewData["UpcomingDeliveriesCount"]</span>
+                                        }
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" asp-area="" asp-controller="Employee" asp-action="Logout"><i class="bi bi-box-arrow-right"></i> Đăng xuất</a></li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a class="main-nav-link" asp-area="" asp-controller="Employee" asp-action="Register"><i class="bi bi-person-plus"></i> Đăng ký</a></li>
+                        <li class="nav-item"><a class="main-nav-link" asp-area="" asp-controller="Employee" asp-action="Login"><i class="bi bi-box-arrow-in-right"></i> Đăng nhập</a></li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-wave">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120">
+                <defs>
+                    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#0F172A;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <path fill="url(#waveGradient)" fill-opacity="0.9" d="M0,80L80,85C160,90,320,100,480,95C640,90,800,70,960,65C1120,60,1280,70,1360,75L1440,80L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
+            </svg>
+        </div>
+
+        <div class="footer-wrapper">
+            <div class="footer-content">
+                <div class="brand-column">
+                    <div class="footer-logo">
+                        <h2><span class="highlight">S</span>idergin</h2>
+                    </div>
+                    <p class="brand-description">Chúng tôi cung cấp các sản phẩm bổ sung sắt và vitamin chất lượng cao, giúp cải thiện sức khỏe và tăng cường hệ miễn dịch.</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook" class="social-link"><i class="fab fa-facebook-f"></i> Facebook</a>
+                        <a href="#" aria-label="Instagram" class="social-link"><i class="fab fa-instagram"></i> Instagram</a>
+                        <a href="#" aria-label="YouTube" class="social-link"><i class="fab fa-youtube"></i> YouTube</a>
+                        <a href="#" aria-label="TikTok" class="social-link"><i class="fab fa-tiktok"></i> TikTok</a>
+                    </div>
+                </div>
+
+                <div class="footer-content">
+                    <div class="company-info">
+                        <h3><span class="highlight">S</span>idergin - Nhà phân phối Thuốc Việt số 1</h3>
+                        <div class="contact-grid">
+                            <div class="contact-column">
+                                <p><i class="fas fa-map-marker-alt"></i> 123 Đường Số 1, Quận 1, TP. Hồ Chí Minh</p>
+                                <p><i class="fas fa-id-card"></i> Mã số: 123456789</p>
+                                <p><i class="fas fa-phone"></i> <a href="tel:0123456789">0123456789</a></p>
+                            </div>
+                            <div class="contact-column">
+                                <p><i class="fab fa-whatsapp"></i> <a href="https://zalo.me/0123456789">Zalo: 0123456789</a></p>
+                                <p><i class="fas fa-envelope"></i> <a href="mailto:support@sidergin.com">support@sidergin.com</a></p>
+                                <p><i class="far fa-clock"></i> Thứ 2 - Thứ 6: 8:00 - 17:30</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="footer-links">
+                        <h3>Chính sách hỗ trợ</h3>
+                        <ul>
+                            <li><a href="#"><i class="fas fa-angle-right"></i> Chính sách mua hàng</a></li>
+                            <li><a href="#"><i class="fas fa-angle-right"></i> Phương thức thanh toán</a></li>
+                            <li><a href="#"><i class="fas fa-angle-right"></i> Chính sách vận chuyển</a></li>
+                            <li><a href="#"><i class="fas fa-angle-right"></i> Chính sách đổi trả hàng</a></li>
+                            <li><a href="#"><i class="fas fa-angle-right"></i> Bảo mật thông tin khách hàng</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 SIDERGIN - Nhà phân phối Thuốc Việt số 1. Tất cả quyền được bảo lưu.</p>
+            <a href="/Home/Privacy">Chính sách bảo mật</a>
+        </div>
+    </footer>
+    <script src="~/js/dropdown.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

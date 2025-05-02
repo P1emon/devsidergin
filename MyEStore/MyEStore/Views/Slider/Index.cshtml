@@ -1,0 +1,60 @@
+﻿@model IEnumerable<MyEStore.Models.Slider>
+@{
+    ViewData["Title"] = "Quản lý Slider";
+}
+<div class="container py-4">
+    <h1 class="mb-4">Danh sách Slider</h1>
+    @if (TempData["ThongBao"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["ThongBao"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <p>
+        <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Thêm Slider</a>
+    </p>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Tiêu đề</th>
+                        <th>Hình ảnh</th>
+                        <th>Link quảng cáo</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày kết thúc</th>
+                        <th>Hiệu lực</th>
+                        <th>Nhân viên</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var slider in Model)
+                    {
+                        <tr>
+                            <td>@slider.TieuDe</td>
+                            <td>
+                                <img src="@slider.HinhAnh" alt="@slider.TieuDe" style="max-width: 100px; height: auto;" class="img-thumbnail" />
+                            </td>
+                            <td><a href="@slider.LinkQuangCao" target="_blank" class="text-truncate" style="max-width: 200px; display: inline-block;">@slider.LinkQuangCao</a></td>
+                            <td>@slider.NgayBatDau.ToString("dd/MM/yyyy")</td>
+                            <td>@slider.NgayKetThuc.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                <span class="badge bg-@(slider.HieuLuc ? "success" : "danger")">
+                                    @(slider.HieuLuc ? "Có" : "Không")
+                                </span>
+                            </td>
+                            <td>@(slider.NhanVien?.HoTen ?? "Không xác định")</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@slider.MaSlider" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i> Sửa
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

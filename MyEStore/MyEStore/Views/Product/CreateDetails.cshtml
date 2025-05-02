@@ -1,0 +1,122 @@
+﻿@model MyEStore.Entities.HangHoaChiTiet
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Thêm chi tiết sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Updated layout path
+}
+
+<div class="container-fluid">
+    <h2 class="mt-4">Chi tiết sản phẩm</h2>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-list-alt mr-1"></i>
+            @if (ViewBag.TenHh != null)
+            {
+                <span>Chi tiết cho sản phẩm: @ViewBag.TenHh</span>
+            }
+            else
+            {
+                <span>Thêm chi tiết sản phẩm</span>
+            }
+        </div>
+        <div class="card-body">
+            <form asp-action="CreateDetails">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                @if (ViewBag.MaHh == null)
+                {
+                    <div class="form-group">
+                        <label for="MaHh" class="control-label">Chọn sản phẩm</label>
+                        <select asp-for="MaHh" class="form-control" asp-items="ViewBag.HangHoaList" required>
+                            <option value="">-- Chọn sản phẩm --</option>
+                        </select>
+                        <span asp-validation-for="MaHh" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" asp-for="MaHh" value="@ViewBag.MaHh" />
+                }
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="CongDung" class="control-label">Công dụng</label>
+                            <textarea asp-for="CongDung" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="CongDung" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="DoiTuongSuDung" class="control-label">Đối tượng sử dụng</label>
+                            <textarea asp-for="DoiTuongSuDung" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="DoiTuongSuDung" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="QuyCachDongGoi" class="control-label">Quy cách đóng gói</label>
+                            <textarea asp-for="QuyCachDongGoi" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="QuyCachDongGoi" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="ThanhPhan" class="control-label">Thành phần</label>
+                            <textarea asp-for="ThanhPhan" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="ThanhPhan" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="CongNgheDacBiet" class="control-label">Công nghệ đặc biệt</label>
+                            <textarea asp-for="CongNgheDacBiet" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="CongNgheDacBiet" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="LoiIchNoiBat" class="control-label">Lợi ích nổi bật</label>
+                            <textarea asp-for="LoiIchNoiBat" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="LoiIchNoiBat" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LuuY" class="control-label">Lưu ý</label>
+                    <textarea asp-for="LuuY" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="LuuY" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Lưu thông tin" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function() {
+            // Thêm WYSIWYG editor cho các textarea nếu cần
+            $('textarea').each(function() {
+                $(this).summernote({
+                    height: 120,
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'italic', 'underline', 'clear']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['insert', ['link']],
+                        ['view', ['fullscreen', 'codeview', 'help']]
+                    ]
+                });
+            });
+        });
+    </script>
+}

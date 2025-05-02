@@ -1,0 +1,388 @@
+﻿/* Reset và thiết lập biến màu sắc */
+:root {
+    --primary: #2c7be5;
+    --primary-dark: #1a68d1;
+    --secondary: #95aac9;
+    --success: #00cc8d;
+    --danger: #e63757;
+    --warning: #f6c343;
+    --info: #39afd1;
+    --dark: #12263f;
+    --light: #f9fbfd;
+    --white: #ffffff;
+    --body-bg: #f9fbfd;
+    --body-color: #12263f;
+    --border-color: #edf2f9;
+    --border-radius: 0.5rem;
+    --box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
+    --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Thiết lập chung */
+body {
+    font-family: var(--font-family);
+    background-color: var(--body-bg);
+    color: var(--body-color);
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+.container {
+    max-width: 1140px;
+    padding: 2rem 1rem 6rem;
+    margin: 0 auto;
+}
+
+/* Phần Header */
+h1 {
+    font-weight: 600;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: var(--dark);
+    position: relative;
+    display: inline-block;
+}
+
+    h1:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -8px;
+        width: 50px;
+        height: 3px;
+        background-color: var(--primary);
+        border-radius: 2px;
+    }
+
+.text-center h1:after {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Card Style */
+.cart-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.cart-header {
+    padding: 1rem 1.5rem;
+    background-color: var(--light);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-title {
+    font-weight: 600;
+    color: var(--dark);
+    margin: 0;
+    font-size: 1rem;
+}
+
+.cart-body {
+    padding: 1.5rem;
+}
+
+/* Cart Items - Card Layout */
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cart-item-card {
+    display: flex;
+    align-items: center;
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+    .cart-item-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+/* Hình ảnh sản phẩm */
+.cart-item-image {
+    flex: 0 0 auto;
+    margin-right: 1rem;
+}
+
+.product-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+    background-color: var(--light);
+    border: 1px solid var(--border-color);
+    padding: 4px;
+}
+
+/* Chi tiết sản phẩm */
+.cart-item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.product-name {
+    font-weight: 500;
+    color: var(--dark);
+    font-size: 1rem;
+}
+
+.cart-item-price {
+    display: flex;
+    flex-direction: column;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #666;
+    font-size: 0.875rem;
+    line-height: 1;
+}
+
+.discounted-price {
+    color: #dc3545;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    margin-top: 0.25rem;
+    line-height: 1;
+}
+
+.cart-item-total {
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 0.9375rem;
+}
+
+/* Hành động (Số lượng và Xóa) */
+.cart-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Input số lượng */
+.quantity-control {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.quantity-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--light);
+    border: none;
+    color: var(--body-color);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+}
+
+    .quantity-btn:hover {
+        background-color: var(--border-color);
+    }
+
+.quantity-input input {
+    width: 45px;
+    height: 32px;
+    text-align: center;
+    border: none;
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    background-color: var(--white);
+    font-weight: 500;
+    color: var(--dark);
+    padding: 0;
+    -moz-appearance: textfield;
+}
+
+    .quantity-input input::-webkit-outer-spin-button,
+    .quantity-input input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+/* Nút xóa */
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    border-radius: var(--border-radius);
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+}
+
+.btn-danger {
+    color: var(--white);
+    background-color: var(--danger);
+    border-color: var(--danger);
+}
+
+    .btn-danger:hover {
+        background-color: #d9304d;
+        border-color: #d9304d;
+    }
+
+.btn-success {
+    color: var(--white);
+    background-color: var(--success);
+    border-color: var(--success);
+}
+
+    .btn-success:hover {
+        background-color: #00b57f;
+        border-color: #00b57f;
+    }
+
+.btn-primary {
+    color: var(--white);
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+    .btn-primary:hover {
+        background-color: var(--primary-dark);
+        border-color: var(--primary-dark);
+    }
+
+.btn-lg {
+    padding: 0.5rem 1rem;
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    border-radius: var(--border-radius);
+}
+
+/* Footer */
+.cart-footer {
+    padding: 1rem 1.5rem;
+    background-color: var(--light);
+    border-top: 1px solid var(--border-color);
+}
+
+/* Giỏ hàng trống */
+.empty-cart {
+    text-align: center;
+    padding: 3rem 1.5rem;
+}
+
+.empty-cart-icon {
+    font-size: 3rem;
+    color: var(--secondary);
+    margin-bottom: 1.5rem;
+}
+
+.empty-cart-message {
+    font-size: 1.25rem;
+    color: var(--body-color);
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+}
+
+/* Tổng cộng */
+.cart-total {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.cart-total-amount {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* Thanh toán */
+.checkout-section {
+    margin-top: 1.5rem;
+}
+
+/* Health-related styles */
+.health-icon {
+    color: var(--success);
+    margin-right: 0.5rem;
+}
+
+.health-warning {
+    font-size: 0.75rem;
+    color: var(--danger);
+    margin-top: 0.25rem;
+}
+
+.pharmacy-brand {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem 0.5rem 5rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        text-align: center;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cart-item-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .cart-item-image {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+
+    .cart-item-details {
+        width: 100%;
+    }
+
+    .cart-item-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .checkout-section {
+        text-align: center;
+    }
+
+    .cart-footer {
+        text-align: center;
+    }
+}
