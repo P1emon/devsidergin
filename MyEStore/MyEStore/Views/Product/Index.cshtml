@@ -1,74 +1,76 @@
 ﻿@model IEnumerable<MyEStore.Entities.HangHoa>
-
-
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Danh sách sản phẩm";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Updated layout path
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid">
-    <h2 class="mt-4">Quản lý sản phẩm</h2>
-
-    <div class="mb-3">
-        <a asp-action="Create" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Thêm sản phẩm mới
-        </a>
-    </div>
-
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            @TempData["Success"]
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+<div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-blue-700 to-indigo-700 px-6 py-4">
+                <h2 class="text-2xl font-semibold text-white text-center">
+                    <i class="fas fa-table mr-2"></i>Quản lý sản phẩm
+                </h2>
+            </div>
         </div>
-    }
 
-    <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-table mr-1"></i>
-            Danh sách sản phẩm
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="productTable" width="100%" cellspacing="0">
-                    <thead>
+        <!-- Alert -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6 relative">
+                @TempData["Success"]
+                <button type="button" class="absolute top-0 right-0 mt-4 mr-4 text-green-700 hover:text-green-900" data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        }
+
+        <!-- Content -->
+        <div class="bg-white shadow-lg rounded-xl p-6">
+            <div class="flex justify-end mb-4">
+                <a asp-action="Create" class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm">
+                    <i class="fas fa-plus mr-2"></i>Thêm sản phẩm mới
+                </a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-700" id="productTable">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th>Mã</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Loại</th>
-                            <th>Đơn giá (VNĐ)</th>
-                            <th>Giảm giá (%)</th>
-                            <th>Số lượng</th>
-                            <th>Nhà cung cấp</th>
-                            <th>Chức năng</th>
+                            <th class="px-4 py-3">Mã</th>
+                            <th class="px-4 py-3">Tên sản phẩm</th>
+                            <th class="px-4 py-3">Loại</th>
+                            <th class="px-4 py-3">Đơn giá (VNĐ)</th>
+                            <th class="px-4 py-3">Giảm giá (%)</th>
+                            <th class="px-4 py-3">Số lượng</th>
+                            <th class="px-4 py-3">Nhà cung cấp</th>
+                            <th class="px-4 py-3">Chức năng</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>@item.MaHh</td>
-                                <td>@item.TenHh</td>
-                                <td>@item.MaLoaiNavigation?.TenLoai</td>
-                                <td>@item.DonGia?.ToString("N0")</td>
-                                <td>@item.GiamGia%</td>
-                                <td>@item.SoLuong</td>
-                                <td>@item.MaNccNavigation?.TenCongTy</td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a asp-action="Edit" asp-route-id="@item.MaHh" class="btn btn-sm btn-warning" title="Chỉnh sửa">
+                            <tr class="bg-white border-b hover:bg-gray-50">
+                                <td class="px-4 py-3">@item.MaHh</td>
+                                <td class="px-4 py-3">@item.TenHh</td>
+                                <td class="px-4 py-3">@item.MaLoaiNavigation?.TenLoai</td>
+                                <td class="px-4 py-3">@item.DonGia?.ToString("N0")</td>
+                                <td class="px-4 py-3">@item.GiamGia%</td>
+                                <td class="px-4 py-3">@item.SoLuong</td>
+                                <td class="px-4 py-3">@item.MaNccNavigation?.TenCongTy</td>
+                                <td class="px-4 py-3">
+                                    <div class="flex space-x-2">
+                                        <a asp-action="Edit" asp-route-id="@item.MaHh" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-colors text-sm" title="Chỉnh sửa">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a asp-action="Details" asp-route-id="@item.MaHh" class="btn btn-sm btn-info" title="Chi tiết">
+                                        <a asp-action="Details" asp-route-id="@item.MaHh" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors text-sm" title="Chi tiết">
                                             <i class="fas fa-info-circle"></i>
                                         </a>
-                                        <a asp-action="Delete" asp-route-id="@item.MaHh" class="btn btn-sm btn-danger" title="Xóa">
+                                        <a asp-action="Delete" asp-route-id="@item.MaHh" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors text-sm" title="Xóa">
                                             <i class="fas fa-trash"></i>
                                         </a>
-                                        <a asp-action="EditDetails" asp-route-id="@item.MaHh" class="btn btn-sm btn-primary" title="Chi tiết sản phẩm">
+                                        <a asp-action="EditDetails" asp-route-id="@item.MaHh" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 transition-colors text-sm" title="Chi tiết sản phẩm">
                                             <i class="fas fa-list-alt"></i>
                                         </a>
                                     </div>
@@ -83,6 +85,9 @@
 </div>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#productTable').DataTable({
@@ -93,7 +98,9 @@
 
             // Tự động ẩn thông báo sau 5 giây
             setTimeout(function () {
-                $(".alert").alert('close');
+                $(".alert").fadeOut('slow', function () {
+                    $(this).remove();
+                });
             }, 5000);
         });
     </script>

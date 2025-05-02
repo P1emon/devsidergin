@@ -2,64 +2,94 @@
 @{
     ViewData["Title"] = "Thêm Slider";
 }
-<div class="container py-4">
-    <h1 class="mb-4">Thêm Slider</h1>
-    <div class="card">
-        <div class="card-body">
-            <form asp-action="Create" method="post" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                <div class="mb-3">
-                    <label asp-for="TieuDe" class="form-label">Tiêu đề</label>
-                    <input asp-for="TieuDe" class="form-control" placeholder="Nhập tiêu đề slider" />
-                    <span asp-validation-for="TieuDe" class="text-danger"></span>
+
+<div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-blue-700 to-indigo-700 px-6 py-4">
+                <h1 class="text-2xl font-semibold text-white text-center">
+                    <i class="fas fa-plus mr-2"></i>Thêm Slider
+                </h1>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-white shadow-lg rounded-xl p-6">
+            <form asp-action="Create" method="post" enctype="multipart/form-data" class="space-y-6">
+                <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm"></div>
+
+                <!-- Title -->
+                <div>
+                    <label asp-for="TieuDe" class="block text-sm font-medium text-gray-700">Tiêu đề <span class="text-red-500">*</span></label>
+                    <input asp-for="TieuDe" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm" placeholder="Nhập tiêu đề slider" required />
+                    <span asp-validation-for="TieuDe" class="text-red-600 text-xs"></span>
                 </div>
-                <div class="mb-3">
-                    <label asp-for="MoTa" class="form-label">Mô tả</label>
-                    <textarea asp-for="MoTa" class="form-control" rows="4" placeholder="Nhập mô tả (tùy chọn)"></textarea>
-                    <span asp-validation-for="MoTa" class="text-danger"></span>
+
+                <!-- Description -->
+                <div>
+                    <label asp-for="MoTa" class="block text-sm font-medium text-gray-700">Mô tả</label>
+                    <textarea asp-for="MoTa" rows="4" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm" placeholder="Nhập mô tả (tùy chọn)"></textarea>
+                    <span asp-validation-for="MoTa" class="text-red-600 text-xs"></span>
                 </div>
-                <div class="mb-3">
-                    <label asp-for="HinhAnh" class="form-label">Hình ảnh</label>
-                    <input type="file" name="hinhAnh" id="hinhAnh" class="form-control" accept="image/jpeg,image/png,image/gif" required />
+
+                <!-- Image -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Hình ảnh <span class="text-red-500">*</span></label>
+                    <input type="file" name="hinhAnh" id="hinhAnh" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm" accept="image/jpeg,image/png,image/gif" required />
                     <div class="mt-2">
-                        <img id="imagePreview" src="" alt="Image Preview" style="max-width: 200px; height: auto; display: none;" class="img-thumbnail" />
+                        <img id="imagePreview" src="" alt="Image Preview" class="max-w-[200px] h-auto rounded hidden" />
                     </div>
-                    <small class="form-text text-muted">Chấp nhận .jpg, .jpeg, .png, .gif. Kích thước tối đa 5MB.</small>
+                    <p class="mt-1 text-xs text-gray-500">Chấp nhận .jpg, .jpeg, .png, .gif. Kích thước tối đa 5MB.</p>
                     @if (ViewData.ModelState.ContainsKey("HinhAnh") && ViewData.ModelState["HinhAnh"].Errors.Any())
                     {
-                        <span class="text-danger">@ViewData.ModelState["HinhAnh"].Errors.First().ErrorMessage</span>
+                        <span class="text-red-600 text-xs">@ViewData.ModelState["HinhAnh"].Errors.First().ErrorMessage</span>
                     }
                 </div>
-                <div class="mb-3">
-                    <label asp-for="LinkQuangCao" class="form-label">Link quảng cáo</label>
-                    <input asp-for="LinkQuangCao" class="form-control" placeholder="Nhập URL quảng cáo (ví dụ: https://example.com)" />
-                    <span asp-validation-for="LinkQuangCao" class="text-danger"></span>
+
+                <!-- Advertisement Link -->
+                <div>
+                    <label asp-for="LinkQuangCao" class="block text-sm font-medium text-gray-700">Link quảng cáo</label>
+                    <input asp-for="LinkQuangCao" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm" placeholder="Nhập URL quảng cáo (ví dụ: https://example.com)" />
+                    <span asp-validation-for="LinkQuangCao" class="text-red-600 text-xs"></span>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="NgayBatDau" class="form-label">Ngày bắt đầu</label>
-                        <input asp-for="NgayBatDau" type="date" class="form-control" />
-                        <span asp-validation-for="NgayBatDau" class="text-danger"></span>
+
+                <!-- Start and End Dates -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label asp-for="NgayBatDau" class="block text-sm font-medium text-gray-700">Ngày bắt đầu <span class="text-red-500">*</span></label>
+                        <input asp-for="NgayBatDau" type="date" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm" required />
+                        <span asp-validation-for="NgayBatDau" class="text-red-600 text-xs"></span>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="NgayKetThuc" class="form-label">Ngày kết thúc</label>
-                        <input asp-for="NgayKetThuc" type="date" class="form-control" />
-                        <span asp-validation-for="NgayKetThuc" class="text-danger"></span>
+                    <div>
+                        <label asp-for="NgayKetThuc" class="block text-sm font-medium text-gray-700">Ngày kết thúc <span class="text-red-500">*</span></label>
+                        <input asp-for="NgayKetThuc" type="date" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm" required />
+                        <span asp-validation-for="NgayKetThuc" class="text-red-600 text-xs"></span>
                     </div>
                 </div>
-                <div class="mb-3 form-check">
-                    <input asp-for="HieuLuc" class="form-check-input" type="checkbox" checked />
-                    <label asp-for="HieuLuc" class="form-check-label">Hiệu lực</label>
+
+                <!-- Active Status -->
+                <div class="flex items-center">
+                    <input asp-for="HieuLuc" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" checked />
+                    <label asp-for="HieuLuc" class="ml-2 text-sm text-gray-700">Hiệu lực</label>
                 </div>
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i>Lưu</button>
-                    <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left me-2"></i>Quay lại</a>
+
+                <!-- Buttons -->
+                <div class="flex justify-between">
+                    <a asp-action="Index" class="inline-flex items-center px-4 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-600 transition-colors text-sm">
+                        <i class="fas fa-arrow-left mr-2"></i>Quay lại
+                    </a>
+                    <button type="submit" class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm">
+                        <i class="fas fa-save mr-2"></i>Lưu
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
             // Image preview
@@ -69,7 +99,7 @@
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function (e) {
-                        preview.attr('src', e.target.result).show();
+                        preview.attr('src', e.target.result).removeClass('hidden');
                     };
                     reader.readAsDataURL(file);
 
@@ -79,14 +109,14 @@
                     if (!allowedTypes.includes(file.type)) {
                         alert('Chỉ hỗ trợ các định dạng ảnh: .jpg, .jpeg, .png, .gif.');
                         this.value = '';
-                        preview.hide();
+                        preview.addClass('hidden');
                     } else if (file.size > maxSize) {
                         alert('Kích thước ảnh không được vượt quá 5MB.');
                         this.value = '';
-                        preview.hide();
+                        preview.addClass('hidden');
                     }
                 } else {
-                    preview.hide();
+                    preview.addClass('hidden');
                 }
             });
 

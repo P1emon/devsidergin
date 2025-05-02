@@ -2,69 +2,108 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Nhập Chi Tiết Sản Phẩm";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Updated layout path
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Nhập Chi Tiết Sản Phẩm</h1>
+<div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-blue-700 to-indigo-700 px-6 py-4">
+                <h2 class="text-2xl font-semibold text-white text-center">
+                    <i class="fas fa-plus mr-2"></i>Nhập Chi Tiết Sản Phẩm
+                </h2>
+            </div>
+        </div>
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CreateDetail">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="MaHh" class="control-label"></label>
-                <select asp-for="MaHh" class="form-control" asp-items="ViewBag.MaHh"></select>
-                <span asp-validation-for="MaHh" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CongDung" class="control-label"></label>
-                <textarea asp-for="CongDung" class="form-control"></textarea>
-                <span asp-validation-for="CongDung" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DoiTuongSuDung" class="control-label"></label>
-                <textarea asp-for="DoiTuongSuDung" class="form-control"></textarea>
-                <span asp-validation-for="DoiTuongSuDung" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="QuyCachDongGoi" class="control-label"></label>
-                <input asp-for="QuyCachDongGoi" class="form-control" />
-                <span asp-validation-for="QuyCachDongGoi" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ThanhPhan" class="control-label"></label>
-                <textarea asp-for="ThanhPhan" class="form-control"></textarea>
-                <span asp-validation-for="ThanhPhan" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CongNgheDacBiet" class="control-label"></label>
-                <textarea asp-for="CongNgheDacBiet" class="form-control"></textarea>
-                <span asp-validation-for="CongNgheDacBiet" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LoiIchNoiBat" class="control-label"></label>
-                <textarea asp-for="LoiIchNoiBat" class="form-control"></textarea>
-                <span asp-validation-for="LoiIchNoiBat" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LuuY" class="control-label"></label>
-                <textarea asp-for="LuuY" class="form-control"></textarea>
-                <span asp-validation-for="LuuY" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Tạo" class="btn btn-primary" />
-            </div>
-        </form>
+        <!-- Form -->
+        <div class="bg-white shadow-lg rounded-xl p-6">
+            <form asp-action="CreateDetail" class="space-y-6">
+                <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm"></div>
+
+                <!-- Product Selection -->
+                <div>
+                    <label asp-for="MaHh" class="block text-sm font-medium text-gray-700">Chọn sản phẩm <span class="text-red-500">*</span></label>
+                    <select asp-for="MaHh" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm" asp-items="ViewBag.MaHh">
+                        <option value="">-- Chọn sản phẩm --</option>
+                    </select>
+                    <span asp-validation-for="MaHh" class="text-red-600 text-xs"></span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Left Column -->
+                    <div class="space-y-6">
+                        <!-- Công dụng -->
+                        <div>
+                            <label asp-for="CongDung" class="block text-sm font-medium text-gray-700">Công dụng</label>
+                            <textarea asp-for="CongDung" rows="3" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm"></textarea>
+                            <span asp-validation-for="CongDung" class="text-red-600 text-xs"></span>
+                        </div>
+
+                        <!-- Đối tượng sử dụng -->
+                        <div>
+                            <label asp-for="DoiTuongSuDung" class="block text-sm font-medium text-gray-700">Đối tượng sử dụng</label>
+                            <textarea asp-for="DoiTuongSuDung" rows="3" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm"></textarea>
+                            <span asp-validation-for="DoiTuongSuDung" class="text-red-600 text-xs"></span>
+                        </div>
+
+                        <!-- Quy cách đóng gói -->
+                        <div>
+                            <label asp-for="QuyCachDongGoi" class="block text-sm font-medium text-gray-700">Quy cách đóng gói</label>
+                            <input asp-for="QuyCachDongGoi" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm" />
+                            <span asp-validation-for="QuyCachDongGoi" class="text-red-600 text-xs"></span>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-6">
+                        <!-- Thành phần -->
+                        <div>
+                            <label asp-for="ThanhPhan" class="block text-sm font-medium text-gray-700">Thành phần</label>
+                            <textarea asp-for="ThanhPhan" rows="3" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm"></textarea>
+                            <span asp-validation-for="ThanhPhan" class="text-red-600 text-xs"></span>
+                        </div>
+
+                        <!-- Công nghệ đặc biệt -->
+                        <div>
+                            <label asp-for="CongNgheDacBiet" class="block text-sm font-medium text-gray-700">Công nghệ đặc biệt</label>
+                            <textarea asp-for="CongNgheDacBiet" rows="3" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm"></textarea>
+                            <span asp-validation-for="CongNgheDacBiet" class="text-red-600 text-xs"></span>
+                        </div>
+
+                        <!-- Lợi ích nổi bật -->
+                        <div>
+                            <label asp-for="LoiIchNoiBat" class="block text-sm font-medium text-gray-700">Lợi ích nổi bật</label>
+                            <textarea asp-for="LoiIchNoiBat" rows="3" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm"></textarea>
+                            <span asp-validation-for="LoiIchNoiBat" class="text-red-600 text-xs"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lưu ý -->
+                <div>
+                    <label asp-for="LuuY" class="block text-sm font-medium text-gray-700">Lưu ý</label>
+                    <textarea asp-for="LuuY" rows="4" class="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 text-sm"></textarea>
+                    <span asp-validation-for="LuuY" class="text-red-600 text-xs"></span>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-between">
+                    <a asp-action="Index" class="inline-flex items-center px-4 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-600 transition-colors text-sm">
+                        <i class="fas fa-arrow-left mr-2"></i>Quay lại danh sách
+                    </a>
+                    <button type="submit" class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm">
+                        <i class="fas fa-save mr-2"></i>Tạo
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Quay lại danh sách sản phẩm</a>
 </div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 }

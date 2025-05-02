@@ -2,59 +2,83 @@
 @{
     ViewData["Title"] = "Quản lý Slider";
 }
-<div class="container py-4">
-    <h1 class="mb-4">Danh sách Slider</h1>
-    @if (TempData["ThongBao"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            @TempData["ThongBao"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+<div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-blue-700 to-indigo-700 px-6 py-4">
+                <h1 class="text-2xl font-semibold text-white text-center">
+                    <i class="fas fa-newspaper mr-2"></i>Quản lý Slider
+                </h1>
+            </div>
         </div>
-    }
-    <p>
-        <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Thêm Slider</a>
-    </p>
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-bordered table-hover">
-                <thead class="table-primary">
-                    <tr>
-                        <th>Tiêu đề</th>
-                        <th>Hình ảnh</th>
-                        <th>Link quảng cáo</th>
-                        <th>Ngày bắt đầu</th>
-                        <th>Ngày kết thúc</th>
-                        <th>Hiệu lực</th>
-                        <th>Nhân viên</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var slider in Model)
-                    {
+
+        <!-- Alert -->
+        @if (TempData["ThongBao"] != null)
+        {
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6 relative">
+                @TempData["ThongBao"]
+                <button type="button" class="absolute top-0 right-0 mt-4 mr-4 text-green-700 hover:text-green-900" data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        }
+
+        <!-- Content -->
+        <div class="bg-white shadow-lg rounded-xl p-6">
+            <div class="flex justify-end mb-4">
+                <a asp-action="Create" class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm">
+                    <i class="fas fa-plus mr-2"></i>Thêm Slider
+                </a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-700">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <td>@slider.TieuDe</td>
-                            <td>
-                                <img src="@slider.HinhAnh" alt="@slider.TieuDe" style="max-width: 100px; height: auto;" class="img-thumbnail" />
-                            </td>
-                            <td><a href="@slider.LinkQuangCao" target="_blank" class="text-truncate" style="max-width: 200px; display: inline-block;">@slider.LinkQuangCao</a></td>
-                            <td>@slider.NgayBatDau.ToString("dd/MM/yyyy")</td>
-                            <td>@slider.NgayKetThuc.ToString("dd/MM/yyyy")</td>
-                            <td>
-                                <span class="badge bg-@(slider.HieuLuc ? "success" : "danger")">
-                                    @(slider.HieuLuc ? "Có" : "Không")
-                                </span>
-                            </td>
-                            <td>@(slider.NhanVien?.HoTen ?? "Không xác định")</td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@slider.MaSlider" class="btn btn-sm btn-warning">
-                                    <i class="fas fa-edit"></i> Sửa
-                                </a>
-                            </td>
+                            <th class="px-4 py-3">Tiêu đề</th>
+                            <th class="px-4 py-3">Hình ảnh</th>
+                            <th class="px-4 py-3">Link quảng cáo</th>
+                            <th class="px-4 py-3">Ngày bắt đầu</th>
+                            <th class="px-4 py-3">Ngày kết thúc</th>
+                            <th class="px-4 py-3">Hiệu lực</th>
+                            <th class="px-4 py-3">Nhân viên</th>
+                            <th class="px-4 py-3">Hành động</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var slider in Model)
+                        {
+                            <tr class="bg-white border-b hover:bg-gray-50">
+                                <td class="px-4 py-3">@slider.TieuDe</td>
+                                <td class="px-4 py-3">
+                                    <img src="@slider.HinhAnh" alt="@slider.TieuDe" class="max-w-[100px] h-auto rounded" />
+                                </td>
+                                <td class="px-4 py-3">
+                                    <a href="@slider.LinkQuangCao" target="_blank" class="text-blue-600 hover:underline truncate block max-w-[200px]">@slider.LinkQuangCao</a>
+                                </td>
+                                <td class="px-4 py-3">@slider.NgayBatDau.ToString("dd/MM/yyyy")</td>
+                                <td class="px-4 py-3">@slider.NgayKetThuc.ToString("dd/MM/yyyy")</td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium @(slider.HieuLuc ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800")">
+                                        @(slider.HieuLuc ? "Có" : "Không")
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3">@(slider.NhanVien?.HoTen ?? "Không xác định")</td>
+                                <td class="px-4 py-3">
+                                    <a asp-action="Edit" asp-route-id="@slider.MaSlider" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-colors text-sm">
+                                        <i class="fas fa-edit mr-1"></i> Sửa
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha affine1/dist/js/bootstrap.bundle.min.js"></script>
+}

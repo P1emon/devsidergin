@@ -2,87 +2,94 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Chi tiết sản phẩm";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Updated layout path
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid">
-    <h2 class="mt-4">Chi tiết sản phẩm</h2>
-
-    <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-info-circle mr-1"></i>
-            Thông tin sản phẩm
+<div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-blue-700 to-indigo-700 px-6 py-4">
+                <h2 class="text-2xl font-semibold text-white text-center">
+                    <i class="fas fa-info-circle mr-2"></i>Chi tiết sản phẩm
+                </h2>
+            </div>
         </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-4 text-center">
+
+        <!-- Content -->
+        <div class="bg-white shadow-lg rounded-xl p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Product Image -->
+                <div class="text-center">
                     @if (!string.IsNullOrEmpty(Model.Hinh))
                     {
-                        <img src="~/Hinh/HangHoa/@Model.Hinh" alt="@Model.TenHh" class="img-fluid mb-3" style="max-height: 300px;" />
+                        <img src="~/Hinh/HangHoa/@Model.Hinh" alt="@Model.TenHh" class="max-h-[300px] w-auto mx-auto rounded-lg" />
                     }
                     else
                     {
-                        <img src="~/Hinh/HangHoa/no-image.png" alt="No Image" class="img-fluid mb-3" style="max-height: 300px;" />
+                        <img src="~/Hinh/HangHoa/no-image.png" alt="No Image" class="max-h-[300px] w-auto mx-auto rounded-lg" />
                     }
                 </div>
-                <div class="col-md-8">
-                    <h3>@Model.TenHh</h3>
-                    <hr />
-                    <dl class="row">
-                        <dt class="col-sm-4">Mã sản phẩm:</dt>
-                        <dd class="col-sm-8">@Model.MaHh</dd>
 
-                        <dt class="col-sm-4">Tên Alias:</dt>
-                        <dd class="col-sm-8">@Model.TenAlias</dd>
+                <!-- Product Details -->
+                <div class="md:col-span-2">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">@Model.TenHh</h3>
+                    <hr class="mb-4">
+                    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
+                        <dt class="text-sm font-medium text-gray-600">Mã sản phẩm:</dt>
+                        <dd class="text-sm text-gray-900">@Model.MaHh</dd>
 
-                        <dt class="col-sm-4">Loại sản phẩm:</dt>
-                        <dd class="col-sm-8">@Model.MaLoaiNavigation?.TenLoai</dd>
+                        <dt class="text-sm font-medium text-gray-600">Tên Alias:</dt>
+                        <dd class="text-sm text-gray-900">@Model.TenAlias</dd>
 
-                        <dt class="col-sm-4">Nhà cung cấp:</dt>
-                        <dd class="col-sm-8">@Model.MaNccNavigation?.TenCongTy</dd>
+                        <dt class="text-sm font-medium text-gray-600">Loại sản phẩm:</dt>
+                        <dd class="text-sm text-gray-900">@Model.MaLoaiNavigation?.TenLoai</dd>
 
-                        <dt class="col-sm-4">Đơn giá:</dt>
-                        <dd class="col-sm-8">@Model.DonGia?.ToString("N0") VNĐ</dd>
+                        <dt class="text-sm font-medium text-gray-600">Nhà cung cấp:</dt>
+                        <dd class="text-sm text-gray-900">@Model.MaNccNavigation?.TenCongTy</dd>
 
-                        <dt class="col-sm-4">Giảm giá:</dt>
-                        <dd class="col-sm-8">@Model.GiamGia%</dd>
+                        <dt class="text-sm font-medium text-gray-600">Đơn giá:</dt>
+                        <dd class="text-sm text-gray-900">@Model.DonGia?.ToString("N0") VNĐ</dd>
 
-                        <dt class="col-sm-4">Số lượng:</dt>
-                        <dd class="col-sm-8">@Model.SoLuong</dd>
+                        <dt class="text-sm font-medium text-gray-600">Giảm giá:</dt>
+                        <dd class="text-sm text-gray-900">@Model.GiamGia%</dd>
 
-                        <dt class="col-sm-4">Đơn vị:</dt>
-                        <dd class="col-sm-8">@Model.MoTaDonVi</dd>
+                        <dt class="text-sm font-medium text-gray-600">Số lượng:</dt>
+                        <dd class="text-sm text-gray-900">@Model.SoLuong</dd>
 
-                        <dt class="col-sm-4">Ngày sản xuất:</dt>
-                        <dd class="col-sm-9">@Model.NgaySx.ToString("dd/MM/yyyy")</dd>
+                        <dt class="text-sm font-medium text-gray-600">Đơn vị:</dt>
+                        <dd class="text-sm text-gray-900">@Model.MoTaDonVi</dd>
 
-                        <dt class="col-sm-4">Ngày tạo:</dt>
-                        <dd class="col-sm-8">@Model.NgayTao.ToString("dd/MM/yyyy HH:mm")</dd>
+                        <dt class="text-sm font-medium text-gray-600">Ngày sản xuất:</dt>
+                        <dd class="text-sm text-gray-900">@Model.NgaySx.ToString("dd/MM/yyyy")</dd>
 
-                        <dt class="col-sm-4">Số lần xem:</dt>
-                        <dd class="col-sm-8">@Model.SoLanXem</dd>
+                        <dt class="text-sm font-medium text-gray-600">Ngày tạo:</dt>
+                        <dd class="text-sm text-gray-900">@Model.NgayTao.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                        <dt class="text-sm font-medium text-gray-600">Số lần xem:</dt>
+                        <dd class="text-sm text-gray-900">@Model.SoLanXem</dd>
                     </dl>
                 </div>
             </div>
 
-            <div class="row mt-4">
-                <div class="col-12">
-                    <h5>Mô tả sản phẩm:</h5>
-                    <div class="p-3 bg-light">
-                        @Html.Raw(Model.MoTa)
-                    </div>
+            <!-- Product Description -->
+            <div class="mt-6">
+                <h5 class="text-lg font-semibold text-gray-800 mb-2">Mô tả sản phẩm:</h5>
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    @Html.Raw(Model.MoTa)
                 </div>
             </div>
 
-            <div class="mt-4">
-                <a asp-action="Edit" asp-route-id="@Model.MaHh" class="btn btn-warning">
-                    <i class="fas fa-edit"></i> Chỉnh sửa
+            <!-- Action Buttons -->
+            <div class="mt-6 flex flex-wrap gap-3">
+                <a asp-action="Edit" asp-route-id="@Model.MaHh" class="inline-flex items-center px-4 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-colors text-sm">
+                    <i class="fas fa-edit mr-2"></i>Chỉnh sửa
                 </a>
-                <a asp-action="EditDetails" asp-route-id="@Model.MaHh" class="btn btn-info">
-                    <i class="fas fa-list-alt"></i> Chi tiết sản phẩm
+                <a asp-action="EditDetails" asp-route-id="@Model.MaHh" class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors text-sm">
+                    <i class="fas fa-list-alt mr-2"></i>Chi tiết sản phẩm
                 </a>
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                <a asp-action="Index" class="inline-flex items-center px-4 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-600 transition-colors text-sm">
+                    <i class="fas fa-arrow-left mr-2"></i>Quay lại danh sách
                 </a>
             </div>
         </div>
