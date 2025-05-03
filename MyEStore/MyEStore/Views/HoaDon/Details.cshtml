@@ -1,0 +1,138 @@
+﻿@model MyEStore.Entities.HoaDon
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+}
+
+<div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-blue-700 to-indigo-700 px-6 py-4">
+                <h1 class="text-2xl font-semibold text-white text-center">
+                    <i class="fas fa-file-invoice mr-2"></i>Chi tiết đơn hàng #@Model.MaHd
+                </h1>
+            </div>
+        </div>
+
+        <!-- Alert -->
+        @if (TempData["ThongBao"] != null)
+        {
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6 relative">
+                @TempData["ThongBao"]
+                <button type="button" class="absolute top-0 right-0 mt-4 mr-4 text-green-700 hover:text-green-900" data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        }
+
+        <!-- Content -->
+        <div class="bg-white shadow-lg rounded-xl p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Thông tin đơn hàng</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <dt class="text-sm font-medium text-gray-500">Mã khách hàng</dt>
+                    <dd class="mt-1 text-sm text-gray-900">@Model.MaKhNavigation.HoTen (@Model.MaKh)</dd>
+                </div>
+                <div>
+                    <dt class="text-sm font-medium text-gray-500">Ngày đặt</dt>
+                    <dd class="mt-1 text-sm text-gray-900">@Model.NgayDat.ToString("dd/MM/yyyy")</dd>
+                </div>
+                <div>
+                    <dt class="text-sm font-medium text-gray-500">Ngày cần</dt>
+                    <dd class="mt-1 text-sm text-gray-900">@(Model.NgayCan?.ToString("dd/MM/yyyy") ?? "N/A")</dd>
+                </div>
+                <div>
+                    <dt class="text-sm font-medium text-gray-500">Ngày giao</dt>
+                    <dd class="mt-1 text-sm text-gray-900">@(Model.NgayGiao?.ToString("dd/MM/yyyy") ?? "N/A")</dd>
+                </div>
+                <div>
+                    <dt class="text-sm font-medium text-gray-500">Địa chỉ</dt>
+                    <dd class="mt-1 text-sm text-gray-900">@Model.DiaChi</dd>
+                </div>
+                <div>
+                    <dt class="text-sm font-medium text-gray-500">Thanh toán</dt>
+                    <dd class="mt-1 text-sm text-gray-900">@Model.CachThanhToan</dd>
+                </div>
+                <div>
+                    <dt class="text-sm font-medium text-gray-500">Vận chuyển</dt>
+                    <dd class="mt-1 text-sm text-gray-900">@Model.CachVanChuyen</dd>
+                </div>
+                <div>
+                    <dt class="text-sm font-medium text-gray-500">Phí vận chuyển</dt>
+                    <dd class="mt-1 text-sm text-gray-900">@Model.PhiVanChuyen.ToString("C")</dd>
+                </div>
+                <div>
+                    <dt class="text-sm font-medium text-gray-500">Trạng thái</dt>
+                    <dd class="mt-1 text-sm text-gray-900">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                            @(Model.MaTrangThai == 3 ? "bg-green-100 text-green-800" :
+                              Model.MaTrangThai == 4 ? "bg-red-100 text-red-800" :
+                              "bg-yellow-100 text-yellow-800")">
+                            @Model.MaTrangThaiNavigation.TenTrangThai
+                        </span>
+                    </dd>
+                </div>
+                <div>
+                    <dt class="text-sm font-medium text-gray-500">Ghi chú</dt>
+                    <dd class="mt-1 text-sm text-gray-900">@(Model.GhiChu ?? "N/A")</dd>
+                </div>
+                @if (Model.NgayHuy.HasValue)
+                {
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Ngày hủy</dt>
+                        <dd class="mt-1 text-sm text-gray-900">@Model.NgayHuy.Value.ToString("dd/MM/yyyy")</dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Lý do hủy</dt>
+                        <dd class="mt-1 text-sm text-gray-900">@(Model.LyDo ?? "N/A")</dd>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Chi tiết sản phẩm -->
+        <div class="bg-white shadow-lg rounded-xl p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Chi tiết sản phẩm</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-700">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3">Sản phẩm</th>
+                            <th class="px-4 py-3">Đơn giá</th>
+                            <th class="px-4 py-3">Số lượng</th>
+                            <th class="px-4 py-3">Giảm giá</th>
+                            <th class="px-4 py-3">Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ChiTietHds)
+                        {
+                            <tr class="bg-white border-b hover:bg-gray-50">
+                                <td class="px-4 py-3">@item.MaHhNavigation.TenHh</td>
+                                <td class="px-4 py-3">@item.DonGia.ToString("C")</td>
+                                <td class="px-4 py-3">@item.SoLuong</td>
+                                <td class="px-4 py-3">@item.GiamGia.ToString("C")</td>
+                                <td class="px-4 py-3">@((item.DonGia * item.SoLuong - item.GiamGia).ToString("C"))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end mt-6">
+            <a asp-action="UpdateStatus" asp-route-id="@Model.MaHd" class="inline-flex items-center px-4 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-colors text-sm mr-2">
+                <i class="fas fa-edit mr-2"></i>Cập nhật trạng thái
+            </a>
+            <a asp-action="Index" class="inline-flex items-center px-4 py-2 rounded-lg bg-gray-600 text-white hover:bg-gray-700 transition-colors text-sm">
+                <i class="fas fa-arrow-left mr-2"></i>Quay lại danh sách
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+}

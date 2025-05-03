@@ -7,9 +7,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DevSidergin.Controllers // Updated namespace
 {
+    [Authorize]
     public class LoaiController : Controller
     {
         private readonly MyeStoreContext _context;

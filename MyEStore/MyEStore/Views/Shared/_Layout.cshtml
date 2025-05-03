@@ -26,7 +26,7 @@
                         </li>
                         <li>
                             <a asp-area="" asp-controller="Supplier" asp-action="Index" class="text-white hover:text-gray-200 transition-colors">
-                                <i class="fas fa-newspaper mr-1"></i> Nhà cung cấp
+                                <i "fas fa-newspaper mr-1"></i> Nhà cung cấp
                             </a>
                         </li>
                         <li>
@@ -37,6 +37,11 @@
                         <li>
                             <a asp-area="" asp-controller="Product" asp-action="Index" class="text-white hover:text-gray-200 transition-colors">
                                 <i class="fas fa-cart-plus mr-1"></i> Hàng hoá
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="HoaDon" asp-action="Index" class="text-white hover:text-gray-200 transition-colors">
+                                <i class="fas fa-file-invoice mr-1"></i> Đơn hàng
                             </a>
                         </li>
                         @if (User.Identity.IsAuthenticated)

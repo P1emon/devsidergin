@@ -1,0 +1,103 @@
+﻿@model IEnumerable<MyEStore.Entities.HoaDon>
+
+@{
+    ViewData["Title"] = "Quản lý đơn hàng";
+}
+
+<div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-blue-700 to-indigo-700 px-6 py-4">
+                <h1 class="text-2xl font-semibold text-white text-center">
+                    <i class="fas fa-file-invoice mr-2"></i>Quản lý đơn hàng
+                </h1>
+            </div>
+        </div>
+
+        <!-- Alert -->
+        @if (TempData["ThongBao"] != null)
+        {
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6 relative">
+                @TempData["ThongBao"]
+                <button type="button" class="absolute top-0 right-0 mt-4 mr-4 text-green-700 hover:text-green-900" data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        }
+
+        <!-- Filter -->
+        <div class="bg-white shadow-lg rounded-xl p-6 mb-6">
+            <form asp-action="Index" method="get" class="flex flex-col sm:flex-row sm:items-end gap-4">
+                <div class="flex-1">
+                    <label for="search" class="block text-sm font-medium text-gray-700">Tìm kiếm</label>
+                    <input type="text" name="search" id="search" value="@ViewData["SearchQuery"]" placeholder="Nhập mã hóa đơn hoặc tên khách hàng" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                </div>
+                <div class="flex-1">
+                    <label for="trangThai" class="block text-sm font-medium text-gray-700">Trạng thái</label>
+                    <select name="trangThai" id="trangThai" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <option value="">Tất cả</option>
+                        @foreach (var trangThai in ViewData["TrangThai"] as List<MyEStore.Entities.TrangThai>)
+                        {
+                            <option value="@trangThai.MaTrangThai" selected="@(ViewData["SelectedTrangThai"]?.ToString() == trangThai.MaTrangThai.ToString() ? "selected" : null)">@trangThai.TenTrangThai</option>
+                        }
+                    </select>
+                </div>
+                <div>
+                    <button type="submit" class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm">
+                        <i class="fas fa-search mr-2"></i>Lọc
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Content -->
+        <div class="bg-white shadow-lg rounded-xl p-6">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-700">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3">Mã HD</th>
+                            <th class="px-4 py-3">Khách hàng</th>
+                            <th class="px-4 py-3">Ngày đặt</th>
+                            <th class="px-4 py-3">Trạng thái</th>
+                            <th class="px-4 py-3">Địa chỉ</th>
+                            <th class="px-4 py-3">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="bg-white border-b hover:bg-gray-50">
+                                <td class="px-4 py-3">@item.MaHd</td>
+                                <td class="px-4 py-3">@item.MaKhNavigation.HoTen</td>
+                                <td class="px-4 py-3">@item.NgayDat.ToString("dd/MM/yyyy")</td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                        @(item.MaTrangThai == 3 ? "bg-green-100 text-green-800" :
+                                          item.MaTrangThai == 4 ? "bg-red-100 text-red-800" :
+                                          "bg-yellow-100 text-yellow-800")">
+                                        @item.MaTrangThaiNavigation.TenTrangThai
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 truncate max-w-[200px]">@item.DiaChi</td>
+                                <td class="px-4 py-3">
+                                    <a asp-action="Details" asp-route-id="@item.MaHd" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm mr-2">
+                                        <i class="fas fa-eye mr-1"></i> Chi tiết
+                                    </a>
+                                    <a asp-action="UpdateStatus" asp-route-id="@item.MaHd" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-colors text-sm">
+                                        <i class="fas fa-edit mr-1"></i> Cập nhật
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+}

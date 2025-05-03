@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DevSidergin.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly MyeStoreContext _context;

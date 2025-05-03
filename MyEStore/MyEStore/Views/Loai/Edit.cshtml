@@ -1,80 +1,81 @@
 ﻿@model MyEStore.Entities.Loai
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 @{
-    ViewData["Title"] = "Thêm mới loại hàng";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Updated layout path
+    ViewData["Title"] = "Chỉnh sửa loại hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid px-4">
-    <h1 class="mt-4">@ViewData["Title"]</h1>
-
-    <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-edit me-1"></i>
-            Chỉnh sửa loại hàng
+<div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-blue-700 to-indigo-700 px-6 py-4">
+                <h1 class="text-2xl font-semibold text-white text-center">
+                    <i class="fas fa-edit mr-2"></i>Chỉnh sửa loại hàng
+                </h1>
+            </div>
         </div>
-        <div class="card-body">
-            @if (TempData["error"] != null)
-            {
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    @TempData["error"]
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            }
 
-            <form asp-action="Edit" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <!-- Alert -->
+        @if (TempData["error"] != null)
+        {
+            <div class="bg-red-100 border-l-4 border-red-500 text-red- внимательно700 p-4 rounded-lg mb-6 relative">
+                @TempData["error"]
+                <button type="button" class="absolute top-0 right-0 mt-4 mr-4 text-red-700 hover:text-red-900" data-bs-dismiss="alert" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        }
+
+        <!-- Content -->
+        <div class="bg-white shadow-lg rounded-xl p-6">
+            <form asp-action="Edit" enctype="multipart/form-data" class="space-y-6">
+                <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm"></div>
                 <input type="hidden" asp-for="MaLoai" />
                 <input type="hidden" name="currentImage" value="@Model.Hinh" />
 
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label asp-for="TenLoai" class="control-label">Tên loại</label>
-                            <input asp-for="TenLoai" class="form-control" required />
-                            <span asp-validation-for="TenLoai" class="text-danger"></span>
-                        </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label asp-for="TenLoai" class="block text-sm font-medium text-gray-700">Tên loại</label>
+                        <input asp-for="TenLoai" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required />
+                        <span asp-validation-for="TenLoai" class="text-red-600 text-sm"></span>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label asp-for="TenLoaiAlias" class="control-label">Tên loại Alias</label>
-                            <input asp-for="TenLoaiAlias" class="form-control" />
-                            <span asp-validation-for="TenLoaiAlias" class="text-danger"></span>
-                        </div>
+                    <div>
+                        <label asp-for="TenLoaiAlias" class="block text-sm font-medium text-gray-700">Tên loại Alias</label>
+                        <input asp-for="TenLoaiAlias" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                        <span asp-validation-for="TenLoaiAlias" class="text-red-600 text-sm"></span>
                     </div>
                 </div>
 
-                <div class="form-group mb-3">
-                    <label asp-for="MoTa" class="control-label">Mô tả</label>
-                    <textarea asp-for="MoTa" class="form-control" rows="4"></textarea>
-                    <span asp-validation-for="MoTa" class="text-danger"></span>
+                <div>
+                    <label asp-for="MoTa" class="block text-sm font-medium text-gray-700">Mô tả</label>
+                    <textarea asp-for="MoTa" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" rows="4"></textarea>
+                    <span asp-validation-for="MoTa" class="text-red-600 text-sm"></span>
                 </div>
 
-                <div class="form-group mb-3">
-                    <label for="fileUpload" class="control-label">Hình ảnh</label>
-                    <input type="file" id="fileUpload" name="fileUpload" class="form-control" onchange="previewImage(event)" />
-
-                    <div class="mt-2">
-                        <strong>Hình ảnh hiện tại:</strong>
+                <div>
+                    <label for="fileUpload" class="block text-sm font-medium text-gray-700">Hình ảnh</label>
+                    <input type="file" id="fileUpload" name="fileUpload" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" onchange="previewImage(event)" />
+                    <div class="mt-4">
+                        <p class="text-sm font-medium text-gray-700">Hình ảnh hiện tại:</p>
                         @if (!string.IsNullOrEmpty(Model.Hinh))
                         {
-                            <img src="~/images/categories/@Model.Hinh" alt="@Model.TenLoai" id="currentImage" style="max-width: 200px; max-height: 200px; margin-top: 10px;" />
+                            <img src="~/images/categories/@Model.Hinh" alt="@Model.TenLoai" id="currentImage" class="max-w-[200px] max-h-[200px] rounded mt-2" />
                         }
                         else
                         {
-                            <p>Không có hình ảnh</p>
+                            <p class="text-gray-500 mt-2">Không có hình ảnh</p>
                         }
+                        <img id="preview" class="max-w-[200px] max-h-[200px] rounded mt-2" style="display: none;" />
                     </div>
-
-                    <img id="preview" style="max-width: 200px; max-height: 200px; display: none; margin-top: 10px;" />
                 </div>
 
-                <div class="form-group mt-4">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Lưu thay đổi
+                <div class="flex justify-end space-x-4">
+                    <button type="submit" class="inline-flex items-center px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm">
+                        <i class="fas fa-save mr-2"></i>Lưu thay đổi
                     </button>
-                    <a asp-action="Index" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Trở về danh sách
+                    <a asp-action="Index" class="inline-flex items-center px-4 py-2 rounded-lg bg-gray-600 text-white hover:bg-gray-700 transition-colors text-sm">
+                        <i class="fas fa-arrow-left mr-2"></i>Trở về danh sách
                     </a>
                 </div>
             </form>
@@ -83,10 +84,10 @@
 </div>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
     <script>
         function previewImage(event) {
             var preview = document.getElementById('preview');
@@ -99,8 +100,8 @@
             preview.style.display = 'block';
             preview.src = URL.createObjectURL(event.target.files[0]);
             preview.onload = function() {
-                URL.revokeObjectURL(preview.src) // free memory
-            }
+                URL.revokeObjectURL(preview.src); // Free memory
+            };
         }
     </script>
 }

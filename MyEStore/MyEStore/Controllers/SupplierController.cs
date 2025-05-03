@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyEStore.Entities;
 using System;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace DevSidergin.Controllers
 {
+    [Authorize]
     public class SupplierController : Controller
     {
         private readonly MyeStoreContext _context;

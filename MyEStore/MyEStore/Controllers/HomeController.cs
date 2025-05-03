@@ -4,9 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DevSidergin.Controllers // Updated namespace
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly MyeStoreContext _context;
