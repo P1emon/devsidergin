@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyEStore.Entities;
 
@@ -11,9 +12,11 @@ using MyEStore.Entities;
 namespace MyEStore.Migrations
 {
     [DbContext(typeof(MyeStoreContext))]
-    partial class MyeStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20250503045054_AddColumnDaXemToThongbao")]
+    partial class AddColumnDaXemToThongbao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,43 @@ namespace MyEStore.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DevSidergin.Entities.ThongBao", b =>
+                {
+                    b.Property<int>("MaTb")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaTb"));
+
+                    b.Property<bool>("DaXem")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MaKh")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MaMv")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MaSlider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NgayTao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NoiDung")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TieuDe")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MaTb");
+
+                    b.ToTable("ThongBaos");
+                });
 
             modelBuilder.Entity("MyEStore.Entities.BanBe", b =>
                 {
@@ -56,9 +96,6 @@ namespace MyEStore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
-                    
-                    b.Property<bool>("DaXem")
-                        .HasColumnType("bit");
 
                     b.HasKey("MaBb")
                         .HasName("PK_Promotions");

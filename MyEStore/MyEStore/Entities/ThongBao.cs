@@ -12,6 +12,6 @@ namespace DevSidergin.Entities
         public string MaKh { get; set; }
         public string MaMv { get; set; }
         public string MaSlider { get; set; }
-
+        public bool DaXem { get; set; }
     }
 }
